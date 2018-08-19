@@ -168,7 +168,7 @@ at the end is `print_endline`, there's also `print_string` function that doesn't
 The syntax for function application is very simple: function name followed by its arguments. You need no
 parentheses or any other special syntax.
 
-This is the Hello World program:
+This is a Hello World program:
 
 ```
 print_endline "hello world"
@@ -216,8 +216,8 @@ We are already familiar with `string`, but the `unit` is new. What is it and why
 As you remember, all expressions have types,
 so when `print_endline "hello world"` is evaluated, the result of evaluation must have some type. A function in OCaml
 cannot &ldquo;return nothing&rdquo;.
-Since many functions are used just for their side effects and cannot produce any useful values, some type must have
-been invented just to have them comply with the &ldquo;all values have types&rdquo; rules.
+Since many functions are used just for their side effects and don't produce any useful values, some type must have
+been invented just to have them comply with the &ldquo;all values have types&rdquo; rule.
 
 The `unit` type is a type that has only one value, and it was invented specially for this purpose. Its only possible value
 is a constant written `()`.
@@ -296,7 +296,7 @@ Patterns have multiple uses and forms, which we will explore later. For now, you
 is a pattern. Another possible pattern is the _wildcard pattern_ written `_`, which comes in handy when
 you need to have an expression evaluated, but don't want to bind its value to any name.
 
-To create independent expressions you can make &ldquo;fake&rdquo; bindings with wildcard patterns:
+To create independent top level expressions you may make &ldquo;fake&rdquo; bindings with wildcard patterns:
 
 ```
 let hello = "hello "
@@ -317,23 +317,40 @@ let () = print_endline world
 In this case you need to watch that the constant pattern on the left hand side and the expression on the right hand side
 have the same type, but when you start using more complex expressions, this can also serve as a useful safeguard against
 accidentally using an expression of a non-unit type on the right hand side. While the wildcard pattern accepts values of
-any types in the `let`-binding context, a constant pattern, such as `()`, will force type checking. The choice whether to
-use this or not is up to the programmer.
+any types in the `let`-binding context, a constant pattern, such as `()`, will force type checking.
+If you know that your expression must have type `unit`, it's always better to write `let () =` rather than `let _ =`.
+
+Here is an example of an error that is made invisible by the wildcard pattern:
+
+```
+let _ = print_endline
+```
+
+The program incorrect, but syntactically valid because functions are values, and the right hand side of a `let`-binding can be any value,
+including a function.
+In this example it's obvious that the argument is missing, but if `print_endline` function had more arguments, it would be
+easier to forget one. Since the wildcard pattern completely ignores the right hand, the program will compile, but print nothing.
+
+However, if you use the unit pattern, the program will fail to compile because `print_endline` function is not a value of type unit:
+
+```
+let () = print_endline
+```
 
 Finally, if you have multiple expressions of the `unit` type, you can chain them using semicolons. In OCaml, the semicolon
-is an _expression separator_ rather than a statement terminator, so you will need at least one wildcard binding to use it though:
+is an _expression separator_ rather than a statement terminator, so you will need at least one unit or wildcard binding to use it though:
 
 ```
 let helloworld = "hello world"
 
-let _ = print_string helloworld; print_newline ()
+let () = print_string helloworld; print_newline ()
 ```
 
 If you try this with expressions of types other than `unit`, the compiler will produce a warning. To suppress the warning,
 you can apply the `ignore` function to your expression, as in:
 
 ```
-let _ = ignore 1; print_endline "hello world"
+let () = ignore 1; print_endline "hello world"
 ```
 
 Finally, you can also use `;;` like in the REPL, but it's a very bad style and should be avoided whenever possible.
@@ -433,7 +450,7 @@ let celsius = read_float ()
 
 let kelvin = celsius +. 273.15
 
-let _ = print_float kelvin; print_newline ()
+let () = print_float kelvin; print_newline ()
 ```
 
 Let's verify that it works:

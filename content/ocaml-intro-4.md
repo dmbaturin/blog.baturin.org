@@ -21,9 +21,9 @@ behaves the same:
 ```
 let hello _ = print_endline "hello world"
 
-let _ = hello ()
-let _ = hello 1
-let _ = hello false
+let () = hello ()
+let () = hello 1
+let () = hello false
 ```
 
 This program will compile just fine and print `hello world` three times.
@@ -96,9 +96,9 @@ The `@@` operator (and remember, operators are functions) takes a function and s
 Its practical use is to reduce the number of parentheses you need in your expressions. Compare these equivalent expressions:
 
 ```
-let _ = print_endline (string_of_int 5)
+let () = print_endline (string_of_int 5)
 
-let _ = print_endline @@ string_of_int 5
+let () = print_endline @@ string_of_int 5
 ```
 
 If it was not in the standard library, it could be trivially defined as:
@@ -116,7 +116,7 @@ sides too.
 Here is an example of an incorrect program:
 
 ```
-let _ = print_endline @@ 5
+let () = print_endline @@ 5
 ```
 
 Another useful combinator is the reverse application combinator written `|>`. It is conceptually similar to the
@@ -130,7 +130,7 @@ let (|>) x f = f x
 Its type is `'a -> ('a -> 'b) -> 'b`. This is useful if you want to take a value and send it down a computation pipeline, for example:
 
 ```
-let _ = 5 |> string_of_int |> print_endline
+let () = 5 |> string_of_int |> print_endline
 ```
 
 The pipeline can be of any length, and can help you avoid a lot of extra parentheses in nested expressions,
@@ -151,7 +151,7 @@ let (+*) f g x = f (g x)
 
 let print_int = print_endline +* string_of_int
 
-let _ = print_int 5
+let () = print_int 5
 ```
 
 The type of the `+*` function we created is `('a -> 'b) -> ('c -> 'a) -> 'c -> 'b`. The types of both
@@ -488,3 +488,5 @@ Write a function with deliberately non-exsaustive pattern matching and cause it 
 Write a logical XOR function using a `match` expression and no more than three cases.
 
 Extend the `shape` type and the `area` function with one or more new shapes of your choice.
+
+Continue to [part 5](https://blog.baturin.org/introduction-to-ocaml-part-5-exceptions-lists-and-structural-recursion.html).

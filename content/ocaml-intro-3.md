@@ -206,7 +206,7 @@ let rec factorial acc n =
   if n = 0 then acc
   else factorial (acc * n) (n - 1)
 
-let _ = Printf.printf "%d\n" (factorial 1 5)
+let () = Printf.printf "%d\n" (factorial 1 5)
 ```
 
 The additional argument `acc` is multiplied by `n` every time,
@@ -283,3 +283,5 @@ Verify that it is indeed tail recursive by using a value of _m_ greater than the
 
 Write a program using two functions that print "I'm a recursive function" and "I'm also a recursive function" respectively
 so that these two lines are printed in an infinite loop.
+
+Continue to [part 4](https://blog.baturin.org/introduction-to-ocaml-part-4-higher-order-functions-parametric-polymorphism-and-algebraic-data-types.html).

@@ -19,7 +19,7 @@ Let's write a simple program using an anonymous function:
 ```
 let a = (fun x -> x * x) 3
 
-let _ = print_int a
+let () = print_int a
 ```
 
 The `fun x -> x * x` function takes a single argument and squares it. Since we already know that
@@ -77,7 +77,7 @@ let plus_two = fun x -> x + a
 
 let a = 3
 
-let _ = print_int (plus_two a)
+let () = print_int (plus_two a)
 ```
 
 This program will print 5 (i.e. 2 + 3, not 3 + 3). The reason is that functions capture bound variables from the scope
@@ -189,7 +189,7 @@ let add = fun x -> (fun y -> x + y)
 
 let x = add 3 (* forgot second argument *)
 
-let _ = Printf.printf "%d\n" x
+let () = Printf.printf "%d\n" x
 ```
 
 It will fail to compile because `add 3` expression has type `int -> int`, while `Printf.printf "%d\n"` is `int -> unit`.
@@ -229,7 +229,7 @@ no arguments cannot exist in OCaml, this is often done for functions used solely
 ```
 let print_hello () = print_endline "hello world"
 
-let _ = print_hello ()
+let () = print_hello ()
 ```
 
 The `print_hello` function in this example has type `unit -> unit`.
@@ -274,7 +274,7 @@ OCaml supports named and optional arguments. Named arguments are preceded with t
 ```
 let greet ~greeting ~name = Printf.printf "%s %s!\n" greeting name
 
-let _ = greet ~name:"world" ~greeting:"hello"
+let () = greet ~name:"world" ~greeting:"hello"
 ```
 
 If you look at the inferred type of the `greet` function, you will see that argument labels
@@ -285,7 +285,7 @@ in the same order as they are defined in the function, you can omit the labels:
 ```
 let greet ~greeting ~name = Printf.printf "%s %s!\n" greeting name
 
-let _ = greet "hello" "world"
+let () = greet "hello" "world"
 ```
 
 The syntax of optional argument is a bit more complicated. Suppose we want to write a function
@@ -297,7 +297,7 @@ This is how we can do it:
 ```
 let greet ?(greeting="hello") name = Printf.printf "%s %s!\n" greeting name
 
-let _ = greet "world" ~greeting:"hi"
+let () = greet "world" ~greeting:"hi"
 ```
 
 The inferred type of this `greet` function will look like this: `?greeting:string -> string -> unit`.
