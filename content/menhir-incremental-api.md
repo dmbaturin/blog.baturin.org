@@ -232,8 +232,8 @@ let message =
 Dune integration is _mostly_ straightforward, except for the `--compile-errors` step made complicated by
 Menhir's insistence of writing the code to stdout. I wish it had an option to save it to file (maybe I should make a patch).
 
-Dune's `with-stdout-to` macro allows to work around it, with an obvious drawback: since Dune is unaware of the input file
-for the target, it can't track if the messaged module should be rebuilt or not, forcing you to do `dune clean` more often.
+Dune's `with-stdout-to` macro allows to work around it. I thought there's no way to make it track the source file,
+but thanks to Armael I've learnt I just needed to specify `(deps ...)` to make it work.
 
 You also need to remember to add `--table` to Menhir flags, and to link `menhirLib` into the executable, since incremental API
 parsers are not standalone.
@@ -251,10 +251,11 @@ Here's my file:
  (flags --table)
  (modules bnf_parser))
 
-; The phony target for saving menhir's stdout to bnf_parser_messages.ml
+; The target for saving menhir's stdout to bnf_parser_messages.ml
 (rule
  (targets bnf_parser_messages.ml)
- (action  (with-stdout-to %{targets} (run menhir --compile-errors ../../../src/bnf_parser.messages bnf_parser.mly))))
+ (deps bnf_parser.messages bnf_parser.mly)
+ (action  (with-stdout-to %{targets} (run menhir --compile-errors %{deps}))))
 
 (executable
  (name bnfgen)
